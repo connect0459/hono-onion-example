@@ -17,19 +17,12 @@ repos:
         entry: npx prettier --write
         language: node
         files: \.(ts|tsx|js|jsx|json|md|yml|yaml)$
-        additional_dependencies: [prettier@3.6.2]
 
       - id: eslint
         name: ESLint
         entry: npx eslint --fix
         language: node
         files: \.(ts|tsx)$
-        additional_dependencies: 
-          - eslint@9.33.0
-          - '@typescript-eslint/parser@8.40.0'
-          - '@typescript-eslint/eslint-plugin@8.40.0'
-          - eslint-config-prettier@10.1.8
-          - eslint-plugin-prettier@5.5.4
 
       - id: typescript-check
         name: TypeScript Check
