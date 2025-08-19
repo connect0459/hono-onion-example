@@ -1,5 +1,5 @@
 {
-  "name": "my-hono",
+  "name": "hono-onion-example",
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/index.ts",
@@ -15,12 +15,12 @@
     "ci": "npm run typecheck && npm run lint && npm run format:check && npm test"
   },
   "dependencies": {
-    "@hono/node-server": "^1.19.0",
-    "hono": "^4.9.2"
+    "@hono/node-server": "1.19.0",
+    "hono": "4.9.2"
   },
   "devDependencies": {
     "@eslint/js": "9.33.0",
-    "@types/node": "^20.11.17",
+    "@types/node": "24.3.0",
     "@typescript-eslint/eslint-plugin": "8.40.0",
     "@typescript-eslint/parser": "8.40.0",
     "@vitest/ui": "3.2.4",
@@ -28,8 +28,8 @@
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-prettier": "5.5.4",
     "prettier": "3.6.2",
-    "tsx": "^4.7.1",
-    "typescript": "^5.8.3",
+    "tsx": "4.20.4",
+    "typescript": "5.9.2",
     "vitest": "3.2.4"
   }
 }
