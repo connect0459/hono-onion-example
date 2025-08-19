@@ -1,8 +1,9 @@
 import { Context } from 'hono'
-import { UserUseCase } from '../../application/usecases/user-usecase'
+import { IUserUseCase } from '../../application/interfaces/user-usecase-interface'
+import { IUserController } from '../interfaces/user-controller-interface'
 
-export class UserController {
-  constructor(private userUseCase: UserUseCase) {}
+export class UserController implements IUserController {
+  constructor(private userUseCase: IUserUseCase) {}
 
   async createUser(c: Context) {
     try {

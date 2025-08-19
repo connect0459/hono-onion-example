@@ -1,11 +1,12 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { UserController } from '../../../src/presentation/controllers/user-controller'
-import { UserUseCase } from '../../../src/application/usecases/user-usecase'
+import { IUserUseCase } from '../../../src/application/interfaces/user-usecase-interface'
+import { IUserController } from '../../../src/presentation/interfaces/user-controller-interface'
 import { User } from '../../../src/domain/entities/user'
 
 describe('UserController', () => {
-  let userController: UserController
-  let mockUserUseCase: UserUseCase
+  let userController: IUserController
+  let mockUserUseCase: IUserUseCase
 
   beforeEach(() => {
     mockUserUseCase = {

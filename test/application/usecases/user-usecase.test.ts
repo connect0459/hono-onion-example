@@ -2,9 +2,10 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { UserUseCase } from '../../../src/application/usecases/user-usecase'
 import { UserRepository } from '../../../src/domain/repositories/user-repository'
 import { User } from '../../../src/domain/entities/user'
+import { IUserUseCase } from '../../../src/application/interfaces/user-usecase-interface'
 
 describe('UserUseCase', () => {
-  let userUseCase: UserUseCase
+  let userUseCase: IUserUseCase
   let mockRepository: UserRepository
 
   beforeEach(() => {

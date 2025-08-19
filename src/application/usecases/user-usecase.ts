@@ -1,7 +1,8 @@
 import { User } from '../../domain/entities/user'
 import { UserRepository } from '../../domain/repositories/user-repository'
+import { IUserUseCase } from '../interfaces/user-usecase-interface'
 
-export class UserUseCase {
+export class UserUseCase implements IUserUseCase {
   constructor(private userRepository: UserRepository) {}
 
   async createUser(userData: { id: string; name: string; email: string }): Promise<User> {

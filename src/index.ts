@@ -3,10 +3,13 @@ import { Hono } from 'hono'
 import { UserController } from './presentation/controllers/user-controller'
 import { UserUseCase } from './application/usecases/user-usecase'
 import { InMemoryUserRepository } from './infrastructure/repositories/in-memory-user-repository'
+import { UserRepository } from './domain/repositories/user-repository'
+import { IUserUseCase } from './application/interfaces/user-usecase-interface'
+import { IUserController } from './presentation/interfaces/user-controller-interface'
 
-const userRepository = new InMemoryUserRepository()
-const userUseCase = new UserUseCase(userRepository)
-const userController = new UserController(userUseCase)
+const userRepository: UserRepository = new InMemoryUserRepository()
+const userUseCase: IUserUseCase = new UserUseCase(userRepository)
+const userController: IUserController = new UserController(userUseCase)
 
 const app = new Hono()
 

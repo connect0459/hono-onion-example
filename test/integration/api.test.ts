@@ -3,14 +3,17 @@ import { Hono } from 'hono'
 import { UserController } from '../../src/presentation/controllers/user-controller'
 import { UserUseCase } from '../../src/application/usecases/user-usecase'
 import { InMemoryUserRepository } from '../../src/infrastructure/repositories/in-memory-user-repository'
+import { UserRepository } from '../../src/domain/repositories/user-repository'
+import { IUserUseCase } from '../../src/application/interfaces/user-usecase-interface'
+import { IUserController } from '../../src/presentation/interfaces/user-controller-interface'
 
 describe('User API Integration', () => {
   let app: Hono
 
   beforeEach(() => {
-    const userRepository = new InMemoryUserRepository()
-    const userUseCase = new UserUseCase(userRepository)
-    const userController = new UserController(userUseCase)
+    const userRepository: UserRepository = new InMemoryUserRepository()
+    const userUseCase: IUserUseCase = new UserUseCase(userRepository)
+    const userController: IUserController = new UserController(userUseCase)
 
     app = new Hono()
     app.post('/users', (c) => userController.createUser(c))
