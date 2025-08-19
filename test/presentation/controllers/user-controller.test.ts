@@ -24,7 +24,8 @@ describe("UserController", () => {
   it("should create a user", async () => {
     const userData = { id: "1", name: "John Doe", email: "john@example.com" };
     const user = new User(userData.id, userData.name, userData.email);
-    mockUserUseCase.createUser = vi.fn().mockResolvedValue(user);
+    const createUserMock = vi.fn().mockResolvedValue(user);
+    mockUserUseCase.createUser = createUserMock;
 
     const mockContext = {
       req: { json: vi.fn().mockResolvedValue(userData) },
@@ -33,13 +34,14 @@ describe("UserController", () => {
 
     await userController.createUser(mockContext);
 
-    expect(mockUserUseCase.createUser).toHaveBeenCalledWith(userData);
+    expect(createUserMock).toHaveBeenCalledWith(userData);
     expect(mockContext.json).toHaveBeenCalledWith(user, 201);
   });
 
   it("should get user by id", async () => {
     const user = new User("1", "John Doe", "john@example.com");
-    mockUserUseCase.getUserById = vi.fn().mockResolvedValue(user);
+    const getUserByIdMock = vi.fn().mockResolvedValue(user);
+    mockUserUseCase.getUserById = getUserByIdMock;
 
     const mockContext = {
       req: { param: vi.fn().mockReturnValue("1") },
@@ -48,20 +50,19 @@ describe("UserController", () => {
 
     await userController.getUserById(mockContext);
 
-    expect(mockUserUseCase.getUserById).toHaveBeenCalledWith("1");
+    expect(getUserByIdMock).toHaveBeenCalledWith("1");
     expect(mockContext.json).toHaveBeenCalledWith(user);
   });
 
-  it("should return 404 when user not found", async () => {
-    mockUserUseCase.getUserById = vi.fn().mockResolvedValue(null);
+  it("should throw UserNotFoundException when user not found", async () => {
+    const getUserByIdMock = vi.fn().mockResolvedValue(null);
+    mockUserUseCase.getUserById = getUserByIdMock;
 
     const mockContext = {
       req: { param: vi.fn().mockReturnValue("1") },
       json: vi.fn(),
     } as unknown as Context;
 
-    await userController.getUserById(mockContext);
-
-    expect(mockContext.json).toHaveBeenCalledWith({ error: "User not found" }, 404);
+    await expect(userController.getUserById(mockContext)).rejects.toThrow("User not found");
   });
 });

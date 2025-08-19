@@ -6,6 +6,7 @@ import { InMemoryUserRepository } from "../../src/infrastructure/repositories/in
 import { UserRepository } from "../../src/domain/repositories/user-repository";
 import { IUserUseCase } from "../../src/application/interfaces/user-usecase-interface";
 import { IUserController } from "../../src/presentation/interfaces/user-controller-interface";
+import { ExceptionHandler } from "../../src/presentation/exception/handler";
 
 describe("User API Integration", () => {
   let app: Hono;
@@ -16,6 +17,12 @@ describe("User API Integration", () => {
     const userController: IUserController = new UserController(userUseCase);
 
     app = new Hono();
+
+    // Add exception handling
+    app.onError((err, c) => {
+      return ExceptionHandler.handle(err, c);
+    });
+
     app.post("/users", c => userController.createUser(c));
     app.get("/users/:id", c => userController.getUserById(c));
     app.get("/users", c => userController.getAllUsers(c));
@@ -62,6 +69,13 @@ describe("User API Integration", () => {
     const body = await res.json();
 
     expect(res.status).toBe(404);
-    expect(body).toEqual({ error: "User not found" });
+    expect(res.headers.get("Content-Type")).toBe("application/problem+json");
+    expect(body).toEqual({
+      type: "https://example.com/probs/not-found",
+      title: "Not Found",
+      status: 404,
+      detail: "User with ID '999' was not found in the system.",
+      instance: "http://localhost/users/999",
+    });
   });
 });

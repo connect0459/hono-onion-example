@@ -22,31 +22,34 @@ describe("UserUseCase", () => {
   it("should create a user", async () => {
     const userData = { id: "1", name: "John Doe", email: "john@example.com" };
     const user = new User(userData.id, userData.name, userData.email);
-    mockRepository.save = vi.fn().mockResolvedValue(user);
+    const saveMock = vi.fn().mockResolvedValue(user);
+    mockRepository.save = saveMock;
 
     const result = await userUseCase.createUser(userData);
 
-    expect(mockRepository.save).toHaveBeenCalledWith(expect.any(User));
+    expect(saveMock).toHaveBeenCalledWith(expect.any(User));
     expect(result).toEqual(user);
   });
 
   it("should get user by id", async () => {
     const user = new User("1", "John Doe", "john@example.com");
-    mockRepository.findById = vi.fn().mockResolvedValue(user);
+    const findByIdMock = vi.fn().mockResolvedValue(user);
+    mockRepository.findById = findByIdMock;
 
     const result = await userUseCase.getUserById("1");
 
-    expect(mockRepository.findById).toHaveBeenCalledWith("1");
+    expect(findByIdMock).toHaveBeenCalledWith("1");
     expect(result).toEqual(user);
   });
 
   it("should get all users", async () => {
     const users = [new User("1", "John Doe", "john@example.com")];
-    mockRepository.findAll = vi.fn().mockResolvedValue(users);
+    const findAllMock = vi.fn().mockResolvedValue(users);
+    mockRepository.findAll = findAllMock;
 
     const result = await userUseCase.getAllUsers();
 
-    expect(mockRepository.findAll).toHaveBeenCalled();
+    expect(findAllMock).toHaveBeenCalled();
     expect(result).toEqual(users);
   });
 });
