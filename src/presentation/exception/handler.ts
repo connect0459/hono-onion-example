@@ -14,21 +14,21 @@ export class ExceptionHandler {
     const instance = c.req.url;
 
     if (error instanceof UserNotFoundException) {
-      const problemDetails = ProblemDetailsDto.notFound(error.detail, instance);
+      const problemDetails = ProblemDetailsDto.notFound(error.detail(), instance);
       return c.json(problemDetails, 404, {
         "Content-Type": "application/problem+json",
       });
     }
 
     if (error instanceof ValidationException) {
-      const problemDetails = ProblemDetailsDto.validationError(error.detail, instance);
+      const problemDetails = ProblemDetailsDto.validationError(error.detail(), instance);
       return c.json(problemDetails, 400, {
         "Content-Type": "application/problem+json",
       });
     }
 
     if (error instanceof DuplicateUserException) {
-      const problemDetails = ProblemDetailsDto.conflict(error.detail, instance);
+      const problemDetails = ProblemDetailsDto.conflict(error.detail(), instance);
       return c.json(problemDetails, 409, {
         "Content-Type": "application/problem+json",
       });
@@ -52,7 +52,7 @@ export class ExceptionHandler {
         error.type,
         error.message,
         error.statusCode,
-        error.detail,
+        error.detail(),
         instance
       );
       return c.json(problemDetails, error.statusCode as 400 | 401 | 403 | 404 | 409 | 422 | 500, {
