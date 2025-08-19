@@ -1,17 +1,47 @@
 // RFC9457 Problem Details for HTTP APIs
 export class ProblemDetailsDto {
-  public readonly type: string;
-  public readonly title: string;
-  public readonly status: number;
-  public readonly detail?: string;
-  public readonly instance?: string;
+  private readonly _type: string;
+  private readonly _title: string;
+  private readonly _status: number;
+  private readonly _detail?: string;
+  private readonly _instance?: string;
 
   constructor(type: string, title: string, status: number, detail?: string, instance?: string) {
-    this.type = type;
-    this.title = title;
-    this.status = status;
-    this.detail = detail;
-    this.instance = instance;
+    this._type = type;
+    this._title = title;
+    this._status = status;
+    this._detail = detail;
+    this._instance = instance;
+  }
+
+  type(): string {
+    return this._type;
+  }
+
+  title(): string {
+    return this._title;
+  }
+
+  status(): number {
+    return this._status;
+  }
+
+  detail(): string | undefined {
+    return this._detail;
+  }
+
+  instance(): string | undefined {
+    return this._instance;
+  }
+
+  toJSON() {
+    return {
+      type: this._type,
+      title: this._title,
+      status: this._status,
+      detail: this._detail,
+      instance: this._instance,
+    };
   }
 
   static notFound(detail?: string, instance?: string): ProblemDetailsDto {
