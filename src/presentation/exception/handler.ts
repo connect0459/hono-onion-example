@@ -49,13 +49,13 @@ export class ExceptionHandler {
 
     if (error instanceof DomainException) {
       const problemDetails = new ProblemDetailsDto(
-        error.type,
+        error.type(),
         error.message,
-        error.statusCode,
+        error.statusCode(),
         error.detail(),
         instance
       );
-      return c.json(problemDetails, error.statusCode as 400 | 401 | 403 | 404 | 409 | 422 | 500, {
+      return c.json(problemDetails, error.statusCode() as 400 | 401 | 403 | 404 | 409 | 422 | 500, {
         "Content-Type": "application/problem+json",
       });
     }

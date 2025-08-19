@@ -1,7 +1,5 @@
 // Base Exception Class
 export abstract class DomainException extends Error {
-  public abstract readonly statusCode: number;
-  public abstract readonly type: string;
   private readonly _timestamp: string;
   private readonly _detail?: string;
 
@@ -12,6 +10,9 @@ export abstract class DomainException extends Error {
     this._detail = detail;
     Error.captureStackTrace(this, this.constructor);
   }
+
+  abstract statusCode(): number;
+  abstract type(): string;
 
   timestamp(): string {
     return this._timestamp;
@@ -24,13 +25,21 @@ export abstract class DomainException extends Error {
 
 // Specific Exception Classes
 export class UserNotFoundException extends DomainException {
-  public readonly statusCode = 404;
-  public readonly type = "https://example.com/probs/user-not-found";
+  private readonly _statusCode = 404;
+  private readonly _type = "https://example.com/probs/user-not-found";
   private readonly _userId: string;
 
   constructor(userId: string) {
     super("User not found", `User with ID '${userId}' was not found in the system.`);
     this._userId = userId;
+  }
+
+  statusCode(): number {
+    return this._statusCode;
+  }
+
+  type(): string {
+    return this._type;
   }
 
   userId(): string {
@@ -39,17 +48,25 @@ export class UserNotFoundException extends DomainException {
 }
 
 export class ValidationException extends DomainException {
-  public readonly statusCode = 400;
-  public readonly type = "https://example.com/probs/validation-error";
+  private readonly _statusCode = 400;
+  private readonly _type = "https://example.com/probs/validation-error";
 
   constructor(message: string, detail?: string) {
     super(message, detail);
   }
+
+  statusCode(): number {
+    return this._statusCode;
+  }
+
+  type(): string {
+    return this._type;
+  }
 }
 
 export class DuplicateUserException extends DomainException {
-  public readonly statusCode = 409;
-  public readonly type = "https://example.com/probs/duplicate-user";
+  private readonly _statusCode = 409;
+  private readonly _type = "https://example.com/probs/duplicate-user";
   private readonly _field: string;
   private readonly _value: string;
 
@@ -57,6 +74,14 @@ export class DuplicateUserException extends DomainException {
     super("User already exists", `A user with ${field} '${value}' already exists.`);
     this._field = field;
     this._value = value;
+  }
+
+  statusCode(): number {
+    return this._statusCode;
+  }
+
+  type(): string {
+    return this._type;
   }
 
   field(): string {
