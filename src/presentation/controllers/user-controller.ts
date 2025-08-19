@@ -10,8 +10,8 @@ export class UserController implements IUserController {
       const userData = await c.req.json();
       const user = await this.userUseCase.createUser(userData);
       return c.json(user, 201);
-    } catch (error: any) {
-      return c.json({ error: error.message }, 400);
+    } catch (error) {
+      return c.json({ error: error instanceof Error ? error.message : "Unknown error" }, 400);
     }
   }
 
@@ -20,13 +20,13 @@ export class UserController implements IUserController {
       const id = c.req.param("id");
       const user = await this.userUseCase.getUserById(id);
 
-      if (!user) {
+      if (user === null) {
         return c.json({ error: "User not found" }, 404);
       }
 
       return c.json(user);
-    } catch (error: any) {
-      return c.json({ error: error.message }, 500);
+    } catch (error) {
+      return c.json({ error: error instanceof Error ? error.message : "Unknown error" }, 500);
     }
   }
 
@@ -34,8 +34,8 @@ export class UserController implements IUserController {
     try {
       const users = await this.userUseCase.getAllUsers();
       return c.json(users);
-    } catch (error: any) {
-      return c.json({ error: error.message }, 500);
+    } catch (error) {
+      return c.json({ error: error instanceof Error ? error.message : "Unknown error" }, 500);
     }
   }
 
@@ -45,13 +45,13 @@ export class UserController implements IUserController {
       const userData = await c.req.json();
       const user = await this.userUseCase.updateUser(id, userData);
 
-      if (!user) {
+      if (user === null) {
         return c.json({ error: "User not found" }, 404);
       }
 
       return c.json(user);
-    } catch (error: any) {
-      return c.json({ error: error.message }, 400);
+    } catch (error) {
+      return c.json({ error: error instanceof Error ? error.message : "Unknown error" }, 400);
     }
   }
 
@@ -60,13 +60,13 @@ export class UserController implements IUserController {
       const id = c.req.param("id");
       const deleted = await this.userUseCase.deleteUser(id);
 
-      if (!deleted) {
+      if (deleted === false) {
         return c.json({ error: "User not found" }, 404);
       }
 
       return c.json({ message: "User deleted successfully" });
-    } catch (error: any) {
-      return c.json({ error: error.message }, 500);
+    } catch (error) {
+      return c.json({ error: error instanceof Error ? error.message : "Unknown error" }, 500);
     }
   }
 }

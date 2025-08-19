@@ -1,19 +1,19 @@
-import { UserController } from '../presentation/controllers/user-controller'
-import { UserUseCase } from '../application/usecases/user-usecase'
-import { InMemoryUserRepository } from '../infrastructure/repositories/in-memory-user-repository'
-import { UserRepository } from '../domain/repositories/user-repository'
-import { IUserUseCase } from '../application/interfaces/user-usecase-interface'
-import { IUserController } from '../presentation/interfaces/user-controller-interface'
+import { UserController } from "../presentation/controllers/user-controller";
+import { UserUseCase } from "../application/usecases/user-usecase";
+import { InMemoryUserRepository } from "../infrastructure/repositories/in-memory-user-repository";
+import { UserRepository } from "../domain/repositories/user-repository";
+import { IUserUseCase } from "../application/interfaces/user-usecase-interface";
+import { IUserController } from "../presentation/interfaces/user-controller-interface";
 
 export class Registry {
-  private static _userController: IUserController
+  private static _userController: IUserController;
 
   static get userController(): IUserController {
-    if (!this._userController) {
-      const userRepository: UserRepository = new InMemoryUserRepository()
-      const userUseCase: IUserUseCase = new UserUseCase(userRepository)
-      this._userController = new UserController(userUseCase)
+    if (this._userController === undefined) {
+      const userRepository: UserRepository = new InMemoryUserRepository();
+      const userUseCase: IUserUseCase = new UserUseCase(userRepository);
+      this._userController = new UserController(userUseCase);
     }
-    return this._userController
+    return this._userController;
   }
 }
