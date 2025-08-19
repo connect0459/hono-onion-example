@@ -9,14 +9,26 @@ export const CreateUserRequestSchema = z.object({
 });
 
 export class CreateUserRequestDto {
-  public readonly id: string;
-  public readonly name: string;
-  public readonly email: string;
+  private readonly _id: string;
+  private readonly _name: string;
+  private readonly _email: string;
 
   private constructor(id: string, name: string, email: string) {
-    this.id = id;
-    this.name = name;
-    this.email = email;
+    this._id = id;
+    this._name = name;
+    this._email = email;
+  }
+
+  id(): string {
+    return this._id;
+  }
+
+  name(): string {
+    return this._name;
+  }
+
+  email(): string {
+    return this._email;
   }
 
   static fromUnknown(data: unknown): CreateUserRequestDto {
@@ -35,12 +47,20 @@ export const UpdateUserRequestSchema = z.object({
 });
 
 export class UpdateUserRequestDto {
-  public readonly name?: string;
-  public readonly email?: string;
+  private readonly _name?: string;
+  private readonly _email?: string;
 
   private constructor(name?: string, email?: string) {
-    this.name = name;
-    this.email = email;
+    this._name = name;
+    this._email = email;
+  }
+
+  name(): string | undefined {
+    return this._name;
+  }
+
+  email(): string | undefined {
+    return this._email;
   }
 
   static fromUnknown(data: unknown): UpdateUserRequestDto {
@@ -55,42 +75,92 @@ export class UpdateUserRequestDto {
 
 // Response DTOs
 export class UserResponseDto {
-  public readonly id: string;
-  public readonly name: string;
-  public readonly email: string;
+  private readonly _id: string;
+  private readonly _name: string;
+  private readonly _email: string;
 
   constructor(id: string, name: string, email: string) {
-    this.id = id;
-    this.name = name;
-    this.email = email;
+    this._id = id;
+    this._name = name;
+    this._email = email;
+  }
+
+  id(): string {
+    return this._id;
+  }
+
+  name(): string {
+    return this._name;
+  }
+
+  email(): string {
+    return this._email;
+  }
+
+  toJSON() {
+    return {
+      id: this._id,
+      name: this._name,
+      email: this._email,
+    };
   }
 
   static fromUser(user: User): UserResponseDto {
-    return new UserResponseDto(user.id, user.name, user.email);
+    return new UserResponseDto(user.id(), user.name(), user.email());
   }
 }
 
 export class ErrorResponseDto {
-  public readonly error: string;
+  private readonly _error: string;
 
   constructor(error: string) {
-    this.error = error;
+    this._error = error;
+  }
+
+  error(): string {
+    return this._error;
+  }
+
+  toJSON() {
+    return {
+      error: this._error,
+    };
   }
 }
 
 export class MessageResponseDto {
-  public readonly message: string;
+  private readonly _message: string;
 
   constructor(message: string) {
-    this.message = message;
+    this._message = message;
+  }
+
+  message(): string {
+    return this._message;
+  }
+
+  toJSON() {
+    return {
+      message: this._message,
+    };
   }
 }
 
 export class UserListResponseDto {
-  public readonly users: UserResponseDto[];
+  private readonly _users: UserResponseDto[];
 
   constructor(users: UserResponseDto[]) {
-    this.users = users;
+    this._users = users;
+  }
+
+  users(): UserResponseDto[] {
+    return this._users;
+  }
+
+  toJSON() {
+    return {
+      users: this._users,
+    };
   }
 
   static fromUsers(users: User[]): UserListResponseDto {

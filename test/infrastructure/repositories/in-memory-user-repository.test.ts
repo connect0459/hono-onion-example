@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { InMemoryUserRepository } from "../../../src/infrastructure/repositories/in-memory-user-repository";
+import { InMemoryUserRepository } from "../../../src/infrastructure/persistence/in-memory-user-repository";
 import { User } from "../../../src/domain/entities/user";
 
 describe("InMemoryUserRepository", () => {
@@ -42,8 +42,8 @@ describe("InMemoryUserRepository", () => {
     await repository.save(user);
 
     const updatedUser = await repository.update("1", { name: "John Smith" });
-    expect(updatedUser?.name).toBe("John Smith");
-    expect(updatedUser?.email).toBe("john@example.com");
+    expect(updatedUser?.name()).toBe("John Smith");
+    expect(updatedUser?.email()).toBe("john@example.com");
   });
 
   it("should delete a user", async () => {

@@ -7,15 +7,27 @@ export const UserSchema = z.object({
 });
 
 export class User {
-  public readonly id: string;
-  public readonly name: string;
-  public readonly email: string;
+  private readonly _id: string;
+  private readonly _name: string;
+  private readonly _email: string;
 
   constructor(id: string, name: string, email: string) {
     const validated = UserSchema.parse({ id, name, email });
-    this.id = validated.id;
-    this.name = validated.name;
-    this.email = validated.email;
+    this._id = validated.id;
+    this._name = validated.name;
+    this._email = validated.email;
+  }
+
+  id(): string {
+    return this._id;
+  }
+
+  name(): string {
+    return this._name;
+  }
+
+  email(): string {
+    return this._email;
   }
 
   static fromObject(data: unknown): User {

@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach } from "vitest";
 import { Hono } from "hono";
 import { UserController } from "../../src/presentation/controllers/user-controller";
 import { UserUseCase } from "../../src/application/usecases/user-usecase";
-import { InMemoryUserRepository } from "../../src/infrastructure/repositories/in-memory-user-repository";
+import { InMemoryUserRepository } from "../../src/infrastructure/persistence/in-memory-user-repository";
 import { UserRepository } from "../../src/domain/repositories/user-repository";
 import { IUserUseCase } from "../../src/application/interfaces/user-usecase-interface";
 import { IUserController } from "../../src/presentation/interfaces/user-controller-interface";

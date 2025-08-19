@@ -1,6 +1,6 @@
 import { UserController } from "../presentation/controllers/user-controller";
 import { UserUseCase } from "../application/usecases/user-usecase";
-import { InMemoryUserRepository } from "../infrastructure/repositories/in-memory-user-repository";
+import { InMemoryUserRepository } from "../infrastructure/persistence/in-memory-user-repository";
 import { UserRepository } from "../domain/repositories/user-repository";
 import { IUserUseCase } from "../application/interfaces/user-usecase-interface";
 import { IUserController } from "../presentation/interfaces/user-controller-interface";

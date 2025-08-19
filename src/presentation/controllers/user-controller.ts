@@ -25,9 +25,9 @@ export class UserController implements IUserController {
 
     const requestDto = CreateUserRequestDto.fromUnknown(body);
     const user = await this.userUseCase.createUser({
-      id: requestDto.id,
-      name: requestDto.name,
-      email: requestDto.email,
+      id: requestDto.id(),
+      name: requestDto.name(),
+      email: requestDto.email(),
     });
 
     const responseDto = UserResponseDto.fromUser(user);
@@ -62,8 +62,8 @@ export class UserController implements IUserController {
 
     const requestDto = UpdateUserRequestDto.fromUnknown(body);
     const user = await this.userUseCase.updateUser(id, {
-      name: requestDto.name,
-      email: requestDto.email,
+      name: requestDto.name(),
+      email: requestDto.email(),
     });
 
     if (user === null) {

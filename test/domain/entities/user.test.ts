@@ -5,9 +5,9 @@ describe("User", () => {
   it("should create a user with valid data", () => {
     const user = new User("1", "John Doe", "john@example.com");
 
-    expect(user.id).toBe("1");
-    expect(user.name).toBe("John Doe");
-    expect(user.email).toBe("john@example.com");
+    expect(user.id()).toBe("1");
+    expect(user.name()).toBe("John Doe");
+    expect(user.email()).toBe("john@example.com");
   });
 
   it("should throw error when email is invalid", () => {
