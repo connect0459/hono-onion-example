@@ -2,7 +2,7 @@ import { z } from "zod";
 import { User } from "../../domain/entities/user";
 
 // Request DTOs
-export const CreateUserRequestSchema = z.object({
+const CreateUserRequestSchema = z.object({
   id: z.string().min(1, "ID is required"),
   name: z.string().min(1, "Name is required"),
   email: z.email("Invalid email format"),
@@ -41,7 +41,7 @@ export class CreateUserRequestDto {
   }
 }
 
-export const UpdateUserRequestSchema = z.object({
+const UpdateUserRequestSchema = z.object({
   name: z.string().min(1, "Name is required").optional(),
   email: z.email("Invalid email format").optional(),
 });
@@ -107,24 +107,6 @@ export class UserResponseDto {
 
   static fromUser(user: User): UserResponseDto {
     return new UserResponseDto(user.id(), user.name(), user.email());
-  }
-}
-
-export class ErrorResponseDto {
-  private readonly _error: string;
-
-  constructor(error: string) {
-    this._error = error;
-  }
-
-  error(): string {
-    return this._error;
-  }
-
-  toJSON() {
-    return {
-      error: this._error,
-    };
   }
 }
 
