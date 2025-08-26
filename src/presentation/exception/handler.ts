@@ -34,22 +34,25 @@ export const handleException = (error: Error, c: Context): Response => {
   // Get request path for instance field
   const instance = c.req.url;
 
-  if (isUserNotFoundException(error)) {
-    const problemDetails = createNotFoundProblem(error.detail, instance);
+  // For functional domain exceptions thrown as Error objects with additional properties
+  const errorObj = error as any;
+
+  if (isUserNotFoundException(errorObj)) {
+    const problemDetails = createNotFoundProblem(errorObj.detail, instance);
     return c.json(problemDetails, 404, {
       "Content-Type": "application/problem+json",
     });
   }
 
-  if (isValidationException(error)) {
-    const problemDetails = createValidationErrorProblem(error.detail, instance);
+  if (isValidationException(errorObj)) {
+    const problemDetails = createValidationErrorProblem(errorObj.detail, instance);
     return c.json(problemDetails, 400, {
       "Content-Type": "application/problem+json",
     });
   }
 
-  if (isDuplicateUserException(error)) {
-    const problemDetails = createConflictProblem(error.detail, instance);
+  if (isDuplicateUserException(errorObj)) {
+    const problemDetails = createConflictProblem(errorObj.detail, instance);
     return c.json(problemDetails, 409, {
       "Content-Type": "application/problem+json",
     });
@@ -68,15 +71,15 @@ export const handleException = (error: Error, c: Context): Response => {
     });
   }
 
-  if (isDomainException(error)) {
+  if (isDomainException(errorObj)) {
     const problemDetails = createProblemDetails(
-      error.type,
-      error.message,
-      error.statusCode,
-      error.detail,
+      errorObj.type,
+      errorObj.message,
+      errorObj.statusCode,
+      errorObj.detail,
       instance
     );
-    return c.json(problemDetails, error.statusCode as 400 | 401 | 403 | 404 | 409 | 422 | 500, {
+    return c.json(problemDetails, errorObj.statusCode as 400 | 401 | 403 | 404 | 409 | 422 | 500, {
       "Content-Type": "application/problem+json",
     });
   }

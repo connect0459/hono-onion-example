@@ -1,26 +1,26 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { Hono } from "hono";
-import { UserController } from "../../src/presentation/controllers/user-controller";
-import { UserUseCase } from "../../src/application/usecases/user-usecase";
-import { InMemoryUserRepository } from "../../src/infrastructure/persistence/in-memory-user-repository";
+import { createUserController } from "../../src/presentation/controllers/user-controller";
+import { createUserUseCase } from "../../src/application/usecases/user-usecase";
+import { createInMemoryUserRepository } from "../../src/infrastructure/persistence/in-memory-user-repository";
 import { UserRepository } from "../../src/domain/repositories/user-repository";
 import { IUserUseCase } from "../../src/application/interfaces/user-usecase-interface";
 import { IUserController } from "../../src/presentation/interfaces/user-controller-interface";
-import { ExceptionHandler } from "../../src/presentation/exception/handler";
+import { handleException } from "../../src/presentation/exception/handler";
 
 describe("User API Integration", () => {
   let app: Hono;
 
   beforeEach(() => {
-    const userRepository: UserRepository = new InMemoryUserRepository();
-    const userUseCase: IUserUseCase = new UserUseCase(userRepository);
-    const userController: IUserController = new UserController(userUseCase);
+    const userRepository: UserRepository = createInMemoryUserRepository();
+    const userUseCase: IUserUseCase = createUserUseCase(userRepository);
+    const userController: IUserController = createUserController(userUseCase);
 
     app = new Hono();
 
     // Add exception handling
     app.onError((err, c) => {
-      return ExceptionHandler.handle(err, c);
+      return handleException(err, c);
     });
 
     app.post("/users", c => userController.createUser(c));
