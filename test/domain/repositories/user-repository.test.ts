@@ -4,7 +4,6 @@ import { User, createUser } from "../../../src/domain/entities/user";
 
 describe("UserRepository Interface", () => {
   it("should define correct method signatures", () => {
-    const mockUser = createUser("1", "John Doe", "john@example.com");
 
     const mockRepository: UserRepository = {
       save: async (user: User): Promise<User> => Promise.resolve(user),

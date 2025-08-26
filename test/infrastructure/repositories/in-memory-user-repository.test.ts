@@ -1,16 +1,17 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { InMemoryUserRepository } from "../../../src/infrastructure/persistence/in-memory-user-repository";
-import { User } from "../../../src/domain/entities/user";
+import { createInMemoryUserRepository } from "../../../src/infrastructure/persistence/in-memory-user-repository";
+import { createUser } from "../../../src/domain/entities/user";
+import { UserRepository } from "../../../src/domain/repositories/user-repository";
 
 describe("InMemoryUserRepository", () => {
-  let repository: InMemoryUserRepository;
+  let repository: UserRepository;
 
   beforeEach(() => {
-    repository = new InMemoryUserRepository();
+    repository = createInMemoryUserRepository();
   });
 
   it("should save and retrieve a user", async () => {
-    const user = new User("1", "John Doe", "john@example.com");
+    const user = createUser("1", "John Doe", "john@example.com");
 
     const savedUser = await repository.save(user);
     expect(savedUser).toEqual(user);
@@ -25,8 +26,8 @@ describe("InMemoryUserRepository", () => {
   });
 
   it("should return all users", async () => {
-    const user1 = new User("1", "John Doe", "john@example.com");
-    const user2 = new User("2", "Jane Doe", "jane@example.com");
+    const user1 = createUser("1", "John Doe", "john@example.com");
+    const user2 = createUser("2", "Jane Doe", "jane@example.com");
 
     await repository.save(user1);
     await repository.save(user2);
@@ -38,16 +39,16 @@ describe("InMemoryUserRepository", () => {
   });
 
   it("should update a user", async () => {
-    const user = new User("1", "John Doe", "john@example.com");
+    const user = createUser("1", "John Doe", "john@example.com");
     await repository.save(user);
 
     const updatedUser = await repository.update("1", { name: "John Smith" });
-    expect(updatedUser?.name()).toBe("John Smith");
-    expect(updatedUser?.email()).toBe("john@example.com");
+    expect(updatedUser?.name).toBe("John Smith");
+    expect(updatedUser?.email).toBe("john@example.com");
   });
 
   it("should delete a user", async () => {
-    const user = new User("1", "John Doe", "john@example.com");
+    const user = createUser("1", "John Doe", "john@example.com");
     await repository.save(user);
 
     const deleted = await repository.delete("1");
