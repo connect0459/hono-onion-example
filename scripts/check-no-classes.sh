@@ -37,26 +37,26 @@ for dir in $SEARCH_DIRS; do
     if [ -d "$dir" ]; then
         while IFS= read -r -d '' file; do
             ((total_files++))
-            
+
             # 各クラスパターンをチェック
             for pattern in "${CLASS_PATTERNS[@]}"; do
                 # ファイル内でパターンを検索
                 matches=$(grep -n "$pattern" "$file" 2>/dev/null || true)
-                
+
                 if [ -n "$matches" ]; then
                     # 除外パターンでないかチェック
                     while IFS= read -r match; do
                         if [ -n "$match" ]; then
                             line_content=$(echo "$match" | cut -d: -f2-)
                             is_excluded=false
-                            
+
                             for exclude_pattern in "${EXCLUDE_PATTERNS[@]}"; do
                                 if echo "$line_content" | grep -qE "$exclude_pattern"; then
                                     is_excluded=true
                                     break
                                 fi
                             done
-                            
+
                             if [ "$is_excluded" = false ]; then
                                 echo "❌ Class found in $file:"
                                 echo "   Line $(echo "$match" | cut -d: -f1): $line_content"
@@ -77,26 +77,26 @@ for pattern in $ROOT_FILES; do
     for file in $pattern; do
         if [ -f "$file" ] && [ "$file" != "*.ts" ] && [ "$file" != "*.tsx" ] && [ "$file" != "*.js" ] && [ "$file" != "*.jsx" ]; then
             ((total_files++))
-            
+
             # 各クラスパターンをチェック
             for class_pattern in "${CLASS_PATTERNS[@]}"; do
                 # ファイル内でパターンを検索
                 matches=$(grep -n "$class_pattern" "$file" 2>/dev/null || true)
-                
+
                 if [ -n "$matches" ]; then
                     # 除外パターンでないかチェック
                     while IFS= read -r match; do
                         if [ -n "$match" ]; then
                             line_content=$(echo "$match" | cut -d: -f2-)
                             is_excluded=false
-                            
+
                             for exclude_pattern in "${EXCLUDE_PATTERNS[@]}"; do
                                 if echo "$line_content" | grep -qE "$exclude_pattern"; then
                                     is_excluded=true
                                     break
                                 fi
                             done
-                            
+
                             if [ "$is_excluded" = false ]; then
                                 echo "❌ Class found in $file:"
                                 echo "   Line $(echo "$match" | cut -d: -f1): $line_content"
