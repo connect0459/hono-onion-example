@@ -1,9 +1,9 @@
 import { Context } from "hono";
 
-export interface IUserController {
-  createUser(c: Context): Promise<Response>;
-  getUserById(c: Context): Promise<Response>;
-  getAllUsers(c: Context): Promise<Response>;
-  updateUser(c: Context): Promise<Response>;
-  deleteUser(c: Context): Promise<Response>;
-}
+export type IUserController = {
+  readonly createUser: (c: Context) => Promise<Response>;
+  readonly getUserById: (c: Context) => Promise<Response>;
+  readonly getAllUsers: (c: Context) => Promise<Response>;
+  readonly updateUser: (c: Context) => Promise<Response>;
+  readonly deleteUser: (c: Context) => Promise<Response>;
+};

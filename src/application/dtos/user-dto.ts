@@ -8,148 +8,90 @@ const CreateUserRequestSchema = z.object({
   email: z.email("Invalid email format"),
 });
 
-export class CreateUserRequestDto {
-  private readonly _id: string;
-  private readonly _name: string;
-  private readonly _email: string;
+export type CreateUserRequestDto = {
+  readonly id: string;
+  readonly name: string;
+  readonly email: string;
+};
 
-  private constructor(id: string, name: string, email: string) {
-    this._id = id;
-    this._name = name;
-    this._email = email;
-  }
+export const createUserRequestFromUnknown = (data: unknown): CreateUserRequestDto => {
+  const validated = CreateUserRequestSchema.parse(data);
+  return {
+    id: validated.id,
+    name: validated.name,
+    email: validated.email,
+  };
+};
 
-  id(): string {
-    return this._id;
-  }
-
-  name(): string {
-    return this._name;
-  }
-
-  email(): string {
-    return this._email;
-  }
-
-  static fromUnknown(data: unknown): CreateUserRequestDto {
-    const validated = CreateUserRequestSchema.parse(data);
-    return new CreateUserRequestDto(validated.id, validated.name, validated.email);
-  }
-
-  static isValid(data: unknown): data is z.infer<typeof CreateUserRequestSchema> {
-    return CreateUserRequestSchema.safeParse(data).success;
-  }
-}
+export const isValidCreateUserRequest = (
+  data: unknown
+): data is z.infer<typeof CreateUserRequestSchema> => {
+  return CreateUserRequestSchema.safeParse(data).success;
+};
 
 const UpdateUserRequestSchema = z.object({
   name: z.string().min(1, "Name is required").optional(),
   email: z.email("Invalid email format").optional(),
 });
 
-export class UpdateUserRequestDto {
-  private readonly _name?: string;
-  private readonly _email?: string;
+export type UpdateUserRequestDto = {
+  readonly name?: string;
+  readonly email?: string;
+};
 
-  private constructor(name?: string, email?: string) {
-    this._name = name;
-    this._email = email;
-  }
+export const updateUserRequestFromUnknown = (data: unknown): UpdateUserRequestDto => {
+  const validated = UpdateUserRequestSchema.parse(data);
+  return {
+    name: validated.name,
+    email: validated.email,
+  };
+};
 
-  name(): string | undefined {
-    return this._name;
-  }
-
-  email(): string | undefined {
-    return this._email;
-  }
-
-  static fromUnknown(data: unknown): UpdateUserRequestDto {
-    const validated = UpdateUserRequestSchema.parse(data);
-    return new UpdateUserRequestDto(validated.name, validated.email);
-  }
-
-  static isValid(data: unknown): data is z.infer<typeof UpdateUserRequestSchema> {
-    return UpdateUserRequestSchema.safeParse(data).success;
-  }
-}
+export const isValidUpdateUserRequest = (
+  data: unknown
+): data is z.infer<typeof UpdateUserRequestSchema> => {
+  return UpdateUserRequestSchema.safeParse(data).success;
+};
 
 // Response DTOs
-export class UserResponseDto {
-  private readonly _id: string;
-  private readonly _name: string;
-  private readonly _email: string;
+export type UserResponseDto = {
+  readonly id: string;
+  readonly name: string;
+  readonly email: string;
+};
 
-  constructor(id: string, name: string, email: string) {
-    this._id = id;
-    this._name = name;
-    this._email = email;
-  }
+export const createUserResponse = (id: string, name: string, email: string): UserResponseDto => ({
+  id,
+  name,
+  email,
+});
 
-  id(): string {
-    return this._id;
-  }
+export const userResponseFromUser = (user: User): UserResponseDto => ({
+  id: user.id,
+  name: user.name,
+  email: user.email,
+});
 
-  name(): string {
-    return this._name;
-  }
+export type MessageResponseDto = {
+  readonly message: string;
+};
 
-  email(): string {
-    return this._email;
-  }
+export const createMessageResponse = (message: string): MessageResponseDto => ({
+  message,
+});
 
-  toJSON() {
-    return {
-      id: this._id,
-      name: this._name,
-      email: this._email,
-    };
-  }
+export type UserListResponseDto = {
+  readonly users: UserResponseDto[];
+};
 
-  static fromUser(user: User): UserResponseDto {
-    return new UserResponseDto(user.id(), user.name(), user.email());
-  }
-}
+export const createUserListResponse = (users: UserResponseDto[]): UserListResponseDto => ({
+  users,
+});
 
-export class MessageResponseDto {
-  private readonly _message: string;
-
-  constructor(message: string) {
-    this._message = message;
-  }
-
-  message(): string {
-    return this._message;
-  }
-
-  toJSON() {
-    return {
-      message: this._message,
-    };
-  }
-}
-
-export class UserListResponseDto {
-  private readonly _users: UserResponseDto[];
-
-  constructor(users: UserResponseDto[]) {
-    this._users = users;
-  }
-
-  users(): UserResponseDto[] {
-    return this._users;
-  }
-
-  toJSON() {
-    return {
-      users: this._users,
-    };
-  }
-
-  static fromUsers(users: User[]): UserListResponseDto {
-    const userDtos = users.map(user => UserResponseDto.fromUser(user));
-    return new UserListResponseDto(userDtos);
-  }
-}
+export const userListResponseFromUsers = (users: User[]): UserListResponseDto => {
+  const userDtos = users.map(user => userResponseFromUser(user));
+  return createUserListResponse(userDtos);
+};
 
 // Type exports
 export type CreateUserRequestData = z.infer<typeof CreateUserRequestSchema>;

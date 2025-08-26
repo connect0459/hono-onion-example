@@ -2,87 +2,87 @@ import { Context } from "hono";
 import { IUserUseCase } from "../../application/interfaces/user-usecase-interface";
 import { IUserController } from "../interfaces/user-controller-interface";
 import {
-  CreateUserRequestDto,
-  UpdateUserRequestDto,
-  UserResponseDto,
-  MessageResponseDto,
-  UserListResponseDto,
+  isValidCreateUserRequest,
+  createUserRequestFromUnknown,
+  isValidUpdateUserRequest,
+  updateUserRequestFromUnknown,
+  userResponseFromUser,
+  createMessageResponse,
+  userListResponseFromUsers,
 } from "../../application/dtos/user-dto";
 import {
-  UserNotFoundException,
-  ValidationException,
+  createUserNotFoundException,
+  createValidationException,
 } from "../../domain/exceptions/user-exceptions";
 
-export class UserController implements IUserController {
-  constructor(private userUseCase: IUserUseCase) {}
-
-  async createUser(c: Context) {
+export const createUserController = (userUseCase: IUserUseCase): IUserController => ({
+  createUser: async (c: Context) => {
     const body = (await c.req.json()) as unknown;
 
-    if (!CreateUserRequestDto.isValid(body)) {
-      throw new ValidationException("Invalid request data");
+    if (!isValidCreateUserRequest(body)) {
+      throw createValidationException("Invalid request data");
     }
 
-    const requestDto = CreateUserRequestDto.fromUnknown(body);
-    const user = await this.userUseCase.createUser({
-      id: requestDto.id(),
-      name: requestDto.name(),
-      email: requestDto.email(),
+    const requestDto = createUserRequestFromUnknown(body);
+    const user = await userUseCase.createUser({
+      id: requestDto.id,
+      name: requestDto.name,
+      email: requestDto.email,
     });
 
-    const responseDto = UserResponseDto.fromUser(user);
+    const responseDto = userResponseFromUser(user);
     return c.json(responseDto, 201);
-  }
+  },
 
-  async getUserById(c: Context) {
+  getUserById: async (c: Context) => {
     const id = c.req.param("id");
-    const user = await this.userUseCase.getUserById(id);
+    const user = await userUseCase.getUserById(id);
 
     if (user === null) {
-      throw new UserNotFoundException(id);
+      throw createUserNotFoundException(id);
     }
 
-    const responseDto = UserResponseDto.fromUser(user);
+    const responseDto = userResponseFromUser(user);
     return c.json(responseDto);
-  }
+  },
 
-  async getAllUsers(c: Context) {
-    const users = await this.userUseCase.getAllUsers();
-    const responseDto = UserListResponseDto.fromUsers(users);
+  getAllUsers: async (c: Context) => {
+    const users = await userUseCase.getAllUsers();
+    const responseDto = userListResponseFromUsers(users);
     return c.json(responseDto);
-  }
+  },
 
-  async updateUser(c: Context) {
+  updateUser: async (c: Context) => {
     const id = c.req.param("id");
     const body = (await c.req.json()) as unknown;
 
-    if (!UpdateUserRequestDto.isValid(body)) {
-      throw new ValidationException("Invalid request data");
+    if (!isValidUpdateUserRequest(body)) {
+      throw createValidationException("Invalid request data");
     }
 
-    const requestDto = UpdateUserRequestDto.fromUnknown(body);
-    const user = await this.userUseCase.updateUser(id, {
-      name: requestDto.name(),
-      email: requestDto.email(),
+    const requestDto = updateUserRequestFromUnknown(body);
+    const user = await userUseCase.updateUser(id, {
+      name: requestDto.name,
+      email: requestDto.email,
     });
 
     if (user === null) {
-      throw new UserNotFoundException(id);
+      throw createUserNotFoundException(id);
     }
 
-    const responseDto = UserResponseDto.fromUser(user);
+    const responseDto = userResponseFromUser(user);
     return c.json(responseDto);
-  }
+  },
 
-  async deleteUser(c: Context) {
+  deleteUser: async (c: Context) => {
     const id = c.req.param("id");
-    const deleted = await this.userUseCase.deleteUser(id);
+    const deleted = await userUseCase.deleteUser(id);
 
     if (deleted === false) {
-      throw new UserNotFoundException(id);
+      throw createUserNotFoundException(id);
     }
 
-    const responseDto = new MessageResponseDto("User deleted successfully");
+    const responseDto = createMessageResponse("User deleted successfully");
     return c.json(responseDto);
-  }
-}
+  },
+});

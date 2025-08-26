@@ -36,3 +36,10 @@ repos:
         language: node
         files: \.(ts|tsx)$
         pass_filenames: false
+
+      - id: check-no-classes
+        name: Check No Classes
+        entry: ./scripts/check-no-classes.sh
+        language: script
+        files: \.(ts|tsx|js|jsx)$
+        pass_filenames: false

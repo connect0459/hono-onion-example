@@ -1,12 +1,21 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { UserUseCase } from "../../../src/application/usecases/user-usecase";
+import { createUserUseCase } from "../../../src/application/usecases/user-usecase";
 import { UserRepository } from "../../../src/domain/repositories/user-repository";
-import { User } from "../../../src/domain/entities/user";
+import { createUser } from "../../../src/domain/entities/user";
 import { IUserUseCase } from "../../../src/application/interfaces/user-usecase-interface";
+
+// Create mutable versions for testing
+type MutableUserRepository = {
+  save: UserRepository["save"];
+  findById: UserRepository["findById"];
+  findAll: UserRepository["findAll"];
+  update: UserRepository["update"];
+  delete: UserRepository["delete"];
+};
 
 describe("UserUseCase", () => {
   let userUseCase: IUserUseCase;
-  let mockRepository: UserRepository;
+  let mockRepository: MutableUserRepository;
 
   beforeEach(() => {
     mockRepository = {
@@ -16,23 +25,29 @@ describe("UserUseCase", () => {
       update: vi.fn(),
       delete: vi.fn(),
     };
-    userUseCase = new UserUseCase(mockRepository);
+    userUseCase = createUserUseCase(mockRepository);
   });
 
   it("should create a user", async () => {
     const userData = { id: "1", name: "John Doe", email: "john@example.com" };
-    const user = new User(userData.id, userData.name, userData.email);
+    const user = createUser(userData.id, userData.name, userData.email);
     const saveMock = vi.fn().mockResolvedValue(user);
     mockRepository.save = saveMock;
 
     const result = await userUseCase.createUser(userData);
 
-    expect(saveMock).toHaveBeenCalledWith(expect.any(User));
+    expect(saveMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        id: userData.id,
+        name: userData.name,
+        email: userData.email,
+      })
+    );
     expect(result).toEqual(user);
   });
 
   it("should get user by id", async () => {
-    const user = new User("1", "John Doe", "john@example.com");
+    const user = createUser("1", "John Doe", "john@example.com");
     const findByIdMock = vi.fn().mockResolvedValue(user);
     mockRepository.findById = findByIdMock;
 
@@ -43,7 +58,7 @@ describe("UserUseCase", () => {
   });
 
   it("should get all users", async () => {
-    const users = [new User("1", "John Doe", "john@example.com")];
+    const users = [createUser("1", "John Doe", "john@example.com")];
     const findAllMock = vi.fn().mockResolvedValue(users);
     mockRepository.findAll = findAllMock;
 
