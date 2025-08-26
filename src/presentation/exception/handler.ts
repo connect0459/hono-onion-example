@@ -44,7 +44,7 @@ export const handleException = (error: Error, c: Context): Response => {
   const instance = c.req.url;
 
   // For functional domain exceptions thrown as Error objects with additional properties
-  const errorObj = error as any;
+  const errorObj = error as Error & Record<string, unknown>;
 
   if (isUserNotFoundException(errorObj)) {
     const problemDetails = createNotFoundProblem(errorObj.detail, instance);

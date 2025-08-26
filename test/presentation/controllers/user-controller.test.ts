@@ -5,9 +5,18 @@ import { IUserController } from "../../../src/presentation/interfaces/user-contr
 import { createUser } from "../../../src/domain/entities/user";
 import { Context } from "hono";
 
+// Create mutable version for testing
+type MutableUserUseCase = {
+  createUser: IUserUseCase["createUser"];
+  getUserById: IUserUseCase["getUserById"];
+  getAllUsers: IUserUseCase["getAllUsers"];
+  updateUser: IUserUseCase["updateUser"];
+  deleteUser: IUserUseCase["deleteUser"];
+};
+
 describe("UserController", () => {
   let userController: IUserController;
-  let mockUserUseCase: IUserUseCase;
+  let mockUserUseCase: MutableUserUseCase;
 
   beforeEach(() => {
     mockUserUseCase = {

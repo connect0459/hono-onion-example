@@ -4,9 +4,18 @@ import { UserRepository } from "../../../src/domain/repositories/user-repository
 import { createUser } from "../../../src/domain/entities/user";
 import { IUserUseCase } from "../../../src/application/interfaces/user-usecase-interface";
 
+// Create mutable versions for testing
+type MutableUserRepository = {
+  save: UserRepository["save"];
+  findById: UserRepository["findById"];
+  findAll: UserRepository["findAll"];
+  update: UserRepository["update"];
+  delete: UserRepository["delete"];
+};
+
 describe("UserUseCase", () => {
   let userUseCase: IUserUseCase;
-  let mockRepository: UserRepository;
+  let mockRepository: MutableUserRepository;
 
   beforeEach(() => {
     mockRepository = {
