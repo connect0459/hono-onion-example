@@ -23,7 +23,9 @@ export const createUserRequestFromUnknown = (data: unknown): CreateUserRequestDt
   };
 };
 
-export const isValidCreateUserRequest = (data: unknown): data is z.infer<typeof CreateUserRequestSchema> => {
+export const isValidCreateUserRequest = (
+  data: unknown
+): data is z.infer<typeof CreateUserRequestSchema> => {
   return CreateUserRequestSchema.safeParse(data).success;
 };
 
@@ -45,7 +47,9 @@ export const updateUserRequestFromUnknown = (data: unknown): UpdateUserRequestDt
   };
 };
 
-export const isValidUpdateUserRequest = (data: unknown): data is z.infer<typeof UpdateUserRequestSchema> => {
+export const isValidUpdateUserRequest = (
+  data: unknown
+): data is z.infer<typeof UpdateUserRequestSchema> => {
   return UpdateUserRequestSchema.safeParse(data).success;
 };
 

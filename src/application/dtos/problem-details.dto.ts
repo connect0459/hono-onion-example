@@ -22,15 +22,12 @@ export const createProblemDetails = (
 });
 
 export const createNotFoundProblem = (detail?: string, instance?: string): ProblemDetailsDto =>
-  createProblemDetails(
-    "https://example.com/probs/not-found",
-    "Not Found",
-    404,
-    detail,
-    instance
-  );
+  createProblemDetails("https://example.com/probs/not-found", "Not Found", 404, detail, instance);
 
-export const createValidationErrorProblem = (detail?: string, instance?: string): ProblemDetailsDto =>
+export const createValidationErrorProblem = (
+  detail?: string,
+  instance?: string
+): ProblemDetailsDto =>
   createProblemDetails(
     "https://example.com/probs/validation-error",
     "Validation Error",
@@ -40,13 +37,7 @@ export const createValidationErrorProblem = (detail?: string, instance?: string)
   );
 
 export const createConflictProblem = (detail?: string, instance?: string): ProblemDetailsDto =>
-  createProblemDetails(
-    "https://example.com/probs/conflict",
-    "Conflict",
-    409,
-    detail,
-    instance
-  );
+  createProblemDetails("https://example.com/probs/conflict", "Conflict", 409, detail, instance);
 
 export const createInternalErrorProblem = (detail?: string, instance?: string): ProblemDetailsDto =>
   createProblemDetails(

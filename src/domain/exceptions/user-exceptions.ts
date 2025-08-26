@@ -35,10 +35,7 @@ export const createUserNotFoundException = (userId: string): Error => {
   return error;
 };
 
-export const createValidationException = (
-  message: string,
-  detail?: string
-): Error => {
+export const createValidationException = (message: string, detail?: string): Error => {
   const error = new Error(message);
   Object.assign(error, {
     name: "ValidationException",
@@ -50,10 +47,7 @@ export const createValidationException = (
   return error;
 };
 
-export const createDuplicateUserException = (
-  field: string,
-  value: string
-): Error => {
+export const createDuplicateUserException = (field: string, value: string): Error => {
   const error = new Error("User already exists");
   Object.assign(error, {
     name: "DuplicateUserException",

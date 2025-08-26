@@ -35,11 +35,14 @@ describe("UserController", () => {
     await userController.createUser(mockContext);
 
     expect(createUserMock).toHaveBeenCalledWith(userData);
-    expect(mockContext.json).toHaveBeenCalledWith(expect.objectContaining({
-      id: userData.id,
-      name: userData.name,
-      email: userData.email,
-    }), 201);
+    expect(mockContext.json).toHaveBeenCalledWith(
+      expect.objectContaining({
+        id: userData.id,
+        name: userData.name,
+        email: userData.email,
+      }),
+      201
+    );
   });
 
   it("should get user by id", async () => {
@@ -55,11 +58,13 @@ describe("UserController", () => {
     await userController.getUserById(mockContext);
 
     expect(getUserByIdMock).toHaveBeenCalledWith("1");
-    expect(mockContext.json).toHaveBeenCalledWith(expect.objectContaining({
-      id: "1",
-      name: "John Doe",
-      email: "john@example.com",
-    }));
+    expect(mockContext.json).toHaveBeenCalledWith(
+      expect.objectContaining({
+        id: "1",
+        name: "John Doe",
+        email: "john@example.com",
+      })
+    );
   });
 
   it("should throw UserNotFoundException when user not found", async () => {

@@ -15,19 +15,28 @@ import {
 } from "../../application/dtos/problem-details.dto";
 
 const isUserNotFoundException = (error: unknown): error is UserNotFoundException =>
-  typeof error === "object" && error !== null && "name" in error && error.name === "UserNotFoundException";
+  typeof error === "object" &&
+  error !== null &&
+  "name" in error &&
+  error.name === "UserNotFoundException";
 
 const isValidationException = (error: unknown): error is ValidationException =>
-  typeof error === "object" && error !== null && "name" in error && error.name === "ValidationException";
+  typeof error === "object" &&
+  error !== null &&
+  "name" in error &&
+  error.name === "ValidationException";
 
 const isDuplicateUserException = (error: unknown): error is DuplicateUserException =>
-  typeof error === "object" && error !== null && "name" in error && error.name === "DuplicateUserException";
+  typeof error === "object" &&
+  error !== null &&
+  "name" in error &&
+  error.name === "DuplicateUserException";
 
 const isDomainException = (error: unknown): error is DomainException =>
-  typeof error === "object" && 
-  error !== null && 
-  "name" in error && 
-  "statusCode" in error && 
+  typeof error === "object" &&
+  error !== null &&
+  "name" in error &&
+  "statusCode" in error &&
   "type" in error;
 
 export const handleException = (error: Error, c: Context): Response => {
@@ -62,10 +71,7 @@ export const handleException = (error: Error, c: Context): Response => {
     const detail = error.issues
       .map(issue => `${issue.path.join(".")}: ${issue.message}`)
       .join(", ");
-    const problemDetails = createValidationErrorProblem(
-      `Validation failed: ${detail}`,
-      instance
-    );
+    const problemDetails = createValidationErrorProblem(`Validation failed: ${detail}`, instance);
     return c.json(problemDetails, 400, {
       "Content-Type": "application/problem+json",
     });
@@ -85,10 +91,7 @@ export const handleException = (error: Error, c: Context): Response => {
   }
 
   // Generic error fallback
-  const problemDetails = createInternalErrorProblem(
-    "An unexpected error occurred",
-    instance
-  );
+  const problemDetails = createInternalErrorProblem("An unexpected error occurred", instance);
   return c.json(problemDetails, 500, {
     "Content-Type": "application/problem+json",
   });

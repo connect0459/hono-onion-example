@@ -27,11 +27,13 @@ describe("UserUseCase", () => {
 
     const result = await userUseCase.createUser(userData);
 
-    expect(saveMock).toHaveBeenCalledWith(expect.objectContaining({
-      id: userData.id,
-      name: userData.name,
-      email: userData.email,
-    }));
+    expect(saveMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        id: userData.id,
+        name: userData.name,
+        email: userData.email,
+      })
+    );
     expect(result).toEqual(user);
   });
 
